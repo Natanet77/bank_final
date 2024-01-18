@@ -1,17 +1,4 @@
-/* * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body,
-html {
-  min-height: 1000px;
-  height: 100%;
-  font-family: "Open Sans", sans-serif;
-} */
-
-.signin-container {
+.signup-container-confirm {
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
@@ -21,27 +8,26 @@ html {
   margin: 12px;
 }
 
-.signin-title {
+.signup-title {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 80px;
 }
 
-.signin-container h2 {
+.signup-container h2 {
   margin-bottom: 40px;
   font-size: 1.5rem;
   color: #1f1d1d;
   font-weight: 700;
 }
 
-.signin-container p {
+.signup-container p {
   margin-bottom: 20px;
   color: #9b9b9b;
 }
 
-.email,
-.password {
+.text {
   width: 100%;
   padding: 20px 16px;
   margin-bottom: 20px;
@@ -51,12 +37,7 @@ html {
   display: grid;
 }
 
-.error {
-  color: #ff0000;
-  margin-bottom: 16px;
-}
-
-.signin-container button {
+.signup-container button {
   width: calc(100% - 2rem);
   padding: 1rem;
   margin-bottom: 1rem;
@@ -69,20 +50,26 @@ html {
   transition: background-color 0.3s;
 }
 
-.signin-container button:hover {
+.signup-container button:hover {
   background-color: #3700b3;
 }
 
-.signin-container .sign-in-link {
+.signup-container .sign-in-link {
   color: #775ce5;
   text-decoration: none;
   font-weight: bold;
 }
 
-.link-p {
+/* .link-p {
   color: #1d1d1f;
 }
 
 .link-a {
   color: #775ce5;
+} */
+
+.signup-container .error {
+  color: red;
+  text-align: center;
+  margin-top: 1rem;
 }

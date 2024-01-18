@@ -45,8 +45,16 @@ body {
 .image {
   position: absolute;
 
-  top: 0px;
-  left: 80px;
+  top: 240px;
+  left: 763px;
+  max-width: 393px;
+  max-height: 450px;
+  width: 100%;
+  height: 100%;
+
+  background-image: url("./kerfin.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 .welcome-space {

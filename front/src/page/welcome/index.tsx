@@ -3,24 +3,28 @@ import "./index.css";
 import React from "react";
 
 import { Link } from "react-router-dom";
-import kefin from "./kefin.svg";
+
+import Button from "../../component/button";
+// import kerfin from "./kerfin.svg";
 
 const WelcomePage = () => {
   return (
-    <div className="welcome-page welcome">
-      <h1 className="welcome-title">Hello!</h1>
-      <p className="welcome-subtitle">Welcome to bank app</p>
-      <img className="image" src={kefin} alt="Money" />
+    <div className="welcome-page">
+      <div className="welcome">
+        <h1 className="welcome-title">Hello!</h1>
+        <p className="welcome-subtitle">Welcome to bank app</p>
+      </div>
 
+      <div className="image"></div>
       <div className="welcome-space"></div>
 
       <div className="buttons">
         <Link className="button" to="/signup">
-          Sign Up
+          <Button>Sign Up</Button>
         </Link>
 
         <Link className="button" to="/signin">
-          Sign In
+          <Button>Sign In</Button>
         </Link>
       </div>
     </div>
