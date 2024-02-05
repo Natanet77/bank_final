@@ -1,4 +1,4 @@
-.signup-container-confirm {
+.recoveryConfirm-container {
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
@@ -8,26 +8,27 @@
   margin: 12px;
 }
 
-.signup-title {
+.recoveryConfirm-title {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 80px;
 }
 
-.signup-container h2 {
+.recoveryConfirm-container h2 {
   margin-bottom: 40px;
   font-size: 1.5rem;
   color: #1f1d1d;
   font-weight: 700;
 }
 
-.signup-container p {
+.recoveryConfirm-container p {
   margin-bottom: 20px;
   color: #9b9b9b;
 }
 
-.text {
+.text,
+.email {
   width: 100%;
   padding: 20px 16px;
   margin-bottom: 20px;
@@ -37,7 +38,10 @@
   display: grid;
 }
 
-.signup-container button {
+.recoveryConfirm-container button {
+  display: flex;
+  margin: auto;
+  justify-content: center;
   width: calc(100% - 2rem);
   padding: 1rem;
   margin-bottom: 1rem;
@@ -50,25 +54,25 @@
   transition: background-color 0.3s;
 }
 
-.signup-container button:hover {
+.recoveryConfirm-container button:hover {
   background-color: #3700b3;
 }
 
-.signup-container .sign-in-link {
+.recoveryConfirm-container .sign-in-link {
   color: #775ce5;
   text-decoration: none;
   font-weight: bold;
 }
 
 /* .link-p {
-  color: #1d1d1f;
-}
+    color: #1d1d1f;
+  }
+  
+  .link-a {
+    color: #775ce5;
+  } */
 
-.link-a {
-  color: #775ce5;
-} */
-
-.signup-container .error {
+.recoveryConfirm-container .error {
   color: red;
   text-align: center;
   margin-top: 1rem;

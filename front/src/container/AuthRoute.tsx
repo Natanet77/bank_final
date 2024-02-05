@@ -7,13 +7,11 @@ interface AuthRouteProps {
 }
 
 const AuthRoute: React.FC<AuthRouteProps> = ({ children }) => {
-  const { state } = useAuth();
-  const { token } = state;
-
+  const { token } = useAuth();
   if (token) {
-    return <Navigate to="/balance-page" replace />;
+    console.log("AuthRoute:", token);
+    return <Navigate to="/balance" replace />;
   }
-
   return <>{children}</>;
 };
 

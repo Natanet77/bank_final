@@ -1,0 +1,80 @@
+.recovery-container {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  /* align-items: center; */
+  height: 100%;
+  gap: 40px;
+  margin: 12px;
+}
+
+.recovery-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 80px;
+  gap: 20px;
+}
+
+.recovery-container h2 {
+  margin-bottom: 40px;
+  font-size: 1.5rem;
+  color: #1f1d1d;
+  font-weight: 700;
+}
+
+.recovery-container p {
+  margin-bottom: 40px;
+  color: #9b9b9b;
+}
+
+.email {
+  width: 100%;
+  padding: 20px 16px;
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 14px;
+  display: grid;
+}
+
+.recovery-container button {
+  display: flex;
+  margin: auto;
+  justify-content: center;
+  margin-top: 40px;
+  width: calc(100% - 2rem);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #6200ee;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.recovery-container button:hover {
+  background-color: #3700b3;
+}
+
+/* .recovery-container .sign-in-link {
+  color: #775ce5;
+  text-decoration: none;
+  font-weight: bold;
+} */
+
+/* .link-p {
+  color: #1d1d1f;
+}
+
+.link-a {
+  color: #775ce5;
+}
+
+.signup-container .error {
+  color: #f2883d;
+  text-align: center;
+  margin-top: 1rem;
+} */

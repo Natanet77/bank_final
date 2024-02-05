@@ -1,10 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import React, { useReducer } from "react";
 
-import AuthContext, {
-  authReducer,
-  initialState,
-} from "./container/AuthContext";
+import { AuthContext, useAuth } from "./container/AuthContext";
 import AuthRoute from "./container/AuthRoute";
 import PrivateRoute from "./container/PrivateRoute";
 
@@ -12,13 +9,13 @@ import WelcomePage from "./page/welcome";
 
 import SignupPage from "./page/signup";
 
-import SignupConfirmPage from "./page/signup-confirm";
+import SignupConfirmPage from "./page/signupConfirm";
 
 import SigninPage from "./page/signin";
 
 import RecoveryPage from "./page/recovery";
 
-import RecoveryConfirmPage from "./page/recoveryConfirm";
+import RecoveryConfirmPage from "./page/recovery-confirm";
 
 import BalancePage from "./page/balance";
 
@@ -26,7 +23,7 @@ import NotificationsPage from "./page/notifications";
 
 import SettingsPage from "./page/settings";
 
-import RecivePage from "./page/recive";
+import ReceivePage from "./page/receive";
 
 import SendPage from "./page/send";
 
@@ -125,10 +122,17 @@ function App() {
   //   InitialState
   // >(authReducer, initState, initializer);
 
-  const [state, dispatch] = useReducer(authReducer, initialState);
-
+  // const [state, dispatch] = useReducer(authReducer, initialState);
+  // const storedState = localStorage.getItem("authState");
+  // const initialState: AuthState = storedState
+  //   ? JSON.parse(storedState)
+  //   : initialAuthState;
+  // const [state, dispatch] = useReducer(authReducer, initialState);
+  // console.log("App: state, dispatch : ", state, dispatch);
+  const data = useAuth();
+  console.log("App:", data.token);
   return (
-    <AuthContext.Provider value={{ state, dispatch }}>
+    <AuthContext.Provider value={data}>
       <BrowserRouter>
         <Routes>
           <Route
@@ -148,11 +152,11 @@ function App() {
             }
           />
           <Route
-            path="/signup-confirm"
+            path="/signupConfirm"
             element={
-              <PrivateRoute>
+              <AuthRoute>
                 <SignupConfirmPage />
-              </PrivateRoute>
+              </AuthRoute>
             }
           />
           <Route
@@ -207,7 +211,7 @@ function App() {
             path="/recive"
             element={
               <PrivateRoute>
-                <RecivePage />
+                <ReceivePage />
               </PrivateRoute>
             }
           />

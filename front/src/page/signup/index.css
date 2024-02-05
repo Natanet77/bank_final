@@ -52,6 +52,9 @@ html {
 }
 
 .signup-container button {
+  display: flex;
+  margin: auto;
+  justify-content: center;
   width: calc(100% - 2rem);
   padding: 1rem;
   margin-bottom: 1rem;
@@ -83,7 +86,7 @@ html {
 }
 
 .signup-container .error {
-  color: red;
+  color: #f2883d;
   text-align: center;
   margin-top: 1rem;
 }
