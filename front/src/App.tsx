@@ -1,7 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import React, { useReducer } from "react";
 
-import { AuthContext, useAuth } from "./container/AuthContext";
+import {
+  AuthContext,
+  authReducer,
+  AuthState,
+  initialAuthState,
+  useAuth,
+} from "./container/AuthContext";
 import AuthRoute from "./container/AuthRoute";
 import PrivateRoute from "./container/PrivateRoute";
 
@@ -11,7 +17,7 @@ import SignupPage from "./page/signup";
 
 import SignupConfirmPage from "./page/signupConfirm";
 
-import SigninPage from "./page/signin";
+import SignInPage from "./page/signin";
 
 import RecoveryPage from "./page/recovery";
 
@@ -114,6 +120,13 @@ import TransactionPage from "./page/transaction";
 // };
 
 function App() {
+  const storedState = localStorage.getItem("authState");
+  const initialState: AuthState = storedState
+    ? JSON.parse(storedState)
+    : initialAuthState;
+
+  const [state, dispatch] = useReducer(authReducer, initialState);
+  console.log("App: state, dispatch : ", state, dispatch);
   // const initState: InitialState = { token: "", user: {} };
   // const initializer = (state: InitialState) => ({ ...state });
 
@@ -129,10 +142,10 @@ function App() {
   //   : initialAuthState;
   // const [state, dispatch] = useReducer(authReducer, initialState);
   // console.log("App: state, dispatch : ", state, dispatch);
-  const data = useAuth();
-  console.log("App:", data.token);
+  // const data = useAuth();
+  // console.log("App:", data.token);
   return (
-    <AuthContext.Provider value={data}>
+    <AuthContext.Provider value={{ state, dispatch }}>
       <BrowserRouter>
         <Routes>
           <Route
@@ -163,7 +176,7 @@ function App() {
             path="/signin"
             element={
               <AuthRoute>
-                <SigninPage />
+                <SignInPage />
               </AuthRoute>
             }
           />
@@ -177,11 +190,7 @@ function App() {
           />
           <Route
             path="/recovery-confirm"
-            element={
-              <AuthRoute>
-                <RecoveryConfirmPage />
-              </AuthRoute>
-            }
+            element={<AuthRoute>{/* <RecoveryConfirmPage /> */}</AuthRoute>}
           />
           <Route
             path="/balance"

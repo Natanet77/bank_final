@@ -1,15 +1,16 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, useReducer, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { BackButton } from "../../component/back-button";
-// import { useAuth } from "../../container/AuthContext";
+import { useAuth } from "../../container/AuthContext";
 import "./index.css";
 
-const SigninPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const SignInPage = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [isEmailValid, setEmailIsValid] = useState(true);
   const [isPasswordValid, setPasswordIsValid] = useState(true);
-  const [error, setError] = useState("");
+  const [alert, setAlert] = useState<string>("");
+  const { state, dispatch } = useAuth();
 
   const validateEmail = (email: string): boolean => {
     const emailRegex: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -43,15 +44,15 @@ const SigninPage = () => {
     setPasswordIsValid(validatePassword(password));
 
     if (!email && !password) {
-      setError("Enter email and password!");
+      setAlert("Enter email and password!");
     } else if (!email) {
-      setError("Enter email!");
+      setAlert("Enter email!");
     } else if (!password) {
-      setError("Enter password!");
+      setAlert("Enter password!");
     } else if (!isEmailValid) {
-      setError("Enter e valid email!");
+      setAlert("Enter e valid email!");
     } else if (!isPasswordValid) {
-      setError("Minimum 6 symbols, 1 UpperCase");
+      setAlert("Minimum 6 symbols, 1 UpperCase");
     } else {
       try {
         const response = await fetch("http://localhost:4000/signin", {
@@ -63,15 +64,20 @@ const SigninPage = () => {
         });
 
         if (response.status === 409) {
+          // Handle the case where the email already exists
           const responseData = await response.json();
 
-          setError(responseData.error);
+          setAlert(responseData.error);
         }
 
         if (response.ok) {
-          const responseData = await response.json();
+          // Registration successful, you can navigate to the next page
+          const responseData = await response.json(); // Parse the JSON response
 
           const user = responseData.user;
+
+          // Dispatch the "LOGIN" action to update the state
+          dispatch({ type: "LOGIN", payload: user });
 
           if (user.isConfirmed) {
             navigate("/balance");
@@ -79,6 +85,7 @@ const SigninPage = () => {
             navigate("/signupConfirm");
           }
         } else {
+          // Handle registration errors
           console.error("Registration failed");
         }
       } catch (error) {
@@ -89,8 +96,8 @@ const SigninPage = () => {
 
   return (
     <div className="signin-container">
-      <BackButton />
       <form onSubmit={handleSubmit}>
+        <BackButton />
         <div className="signin-title">
           <h2>Sign in</h2>
           <p>Select login method</p>
@@ -106,7 +113,7 @@ const SigninPage = () => {
           required
         />
 
-        {error && <div className="error">{error}</div>}
+        {alert && <div className="error">{alert}</div>}
 
         <label htmlFor="password">Password</label>
         <input
@@ -127,9 +134,9 @@ const SigninPage = () => {
 
         <button type="submit">Continue</button>
       </form>
-      {error && <p className="error">{error}</p>}
+      {/* {error && <p className="error">{error}</p>} */}
     </div>
   );
 };
 
-export default SigninPage;
+export default SignInPage;

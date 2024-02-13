@@ -1,4 +1,4 @@
-// import { useAuth } from "../../container/AuthContext";
+import { useAuth } from "../../container/AuthContext";
 
 import React, { useState, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
@@ -11,8 +11,8 @@ const SignupPage = () => {
   const [password, setPassword] = useState("");
   const [isEmailValid, setEmailIsValid] = useState(true);
   const [isPasswordValid, setPasswordIsValid] = useState(true);
-  const [error, setError] = useState("");
-  // const { login } = useAuth();
+  const [alert, setAlert] = useState("");
+  const { state, dispatch } = useAuth();
   // const navigate = useNavigate();
 
   const validateEmail = (email: string): boolean => {
@@ -27,10 +27,8 @@ const SignupPage = () => {
   };
 
   const validatePassword = (password: string) => {
-    // Define your password validation criteria here
     const minLength = 6;
     const hasUppercase = /[A-Z]/.test(password);
-    // const hasSpecialChar = /[!@#$%^&*]/.test(password);
 
     return password.length >= minLength && hasUppercase;
   };
@@ -49,15 +47,15 @@ const SignupPage = () => {
     setPasswordIsValid(validatePassword(password));
 
     if (!email && !password) {
-      setError("Enter email and password!");
+      setAlert("Enter email and password!");
     } else if (!email) {
-      setError("Enter email!");
+      setAlert("Enter email!");
     } else if (!password) {
-      setError("Enter password!");
+      setAlert("Enter password!");
     } else if (!isEmailValid) {
-      setError("Enter e valid email!");
+      setAlert("Enter e valid email!");
     } else if (!isPasswordValid) {
-      setError("Minimum 6 symbols, 1 UpperCase");
+      setAlert("Minimum 6 symbols, 1 UpperCase");
     } else {
       try {
         const response = await fetch("http://localhost:4000/signup", {
@@ -69,27 +67,19 @@ const SignupPage = () => {
         });
 
         if (response.status === 409) {
-          // Handle the case where the email already exists
           const responseData = await response.json();
           console.log(responseData.error);
           console.error(responseData.error);
-          setError(responseData.error);
+          setAlert(responseData.error);
         }
 
         if (response.ok) {
-          // Registration successful, you can navigate to the next page
-          const responseData = await response.json(); // Parse the JSON response
+          const responseData = await response.json();
 
           console.log("Response Data:", responseData);
 
-          // const user = responseData.user;
-          // console.log("user:", user);
-          // dispatch({ type: "LOGIN", payload: user });
-          // console.log("dispatch: ", user);
-
           navigate("/signupConfirm");
         } else {
-          // Handle registration errors
           console.error("Registration failed");
         }
       } catch (error) {
@@ -132,7 +122,7 @@ const SignupPage = () => {
         </p>
         <button type="submit">Continue</button>
       </form>
-      {error && <p className="error">{error}</p>}
+      {alert && <p className="error">{alert}</p>}
     </div>
   );
 };

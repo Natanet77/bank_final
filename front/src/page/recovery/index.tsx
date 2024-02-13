@@ -35,7 +35,6 @@ const RecoveryPage = () => {
           });
 
           if (response.status === 409) {
-            // 'User not find'
             const responseData = await response.json();
             console.error(responseData.error);
 
@@ -43,13 +42,11 @@ const RecoveryPage = () => {
           }
 
           if (response.ok) {
-            // Code confirmed
             const responseData = await response.json(); // Parse the JSON response
             console.log("Response OK responseData:", responseData);
 
             navigate(`/recovery-confirm?email=${email}`);
           } else {
-            // Handle registration errors
             console.error("Recovery failed");
           }
         } catch (error) {
