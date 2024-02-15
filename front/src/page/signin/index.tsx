@@ -8,7 +8,7 @@ const SignInPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isEmailValid, setEmailIsValid] = useState(true);
-  const [isPasswordValid, setPasswordIsValid] = useState(true);
+  const [isPasswordValid, setPasswordIsValid] = useState(false);
   const [alert, setAlert] = useState<string>("");
   const { state, dispatch } = useAuth();
 
@@ -55,7 +55,7 @@ const SignInPage = () => {
       setAlert("Minimum 6 symbols, 1 UpperCase");
     } else {
       try {
-        const response = await fetch("http://localhost:4000/signin", {
+        const res = await fetch("http://localhost:4000/signin", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -63,20 +63,14 @@ const SignInPage = () => {
           body: JSON.stringify({ email, password }),
         });
 
-        if (response.status === 409) {
-          // Handle the case where the email already exists
-          const responseData = await response.json();
+        const responseData = await res.json();
 
+        if (res.status === 409) {
           setAlert(responseData.error);
         }
 
-        if (response.ok) {
-          // Registration successful, you can navigate to the next page
-          const responseData = await response.json(); // Parse the JSON response
-
+        if (res.ok) {
           const user = responseData.user;
-
-          // Dispatch the "LOGIN" action to update the state
           dispatch({ type: "LOGIN", payload: user });
 
           if (user.isConfirmed) {
@@ -85,7 +79,6 @@ const SignInPage = () => {
             navigate("/signupConfirm");
           }
         } else {
-          // Handle registration errors
           console.error("Registration failed");
         }
       } catch (error) {
@@ -134,7 +127,7 @@ const SignInPage = () => {
 
         <button type="submit">Continue</button>
       </form>
-      {/* {error && <p className="error">{error}</p>} */}
+      {alert && <p className="error">{alert}</p>}
     </div>
   );
 };
