@@ -50,7 +50,7 @@ const RecoveryConfirmPage = () => {
   //     const data = await response.json();
   //     console.log("Відповідь на підтвердження реєстрації:", data); // Логування отриманої відповіді
   //     if (data.success) {
-  //       login(data.token, data.user);
+  //       dispatch(data.token, data.user);
   //       navigate("/balance");
   //     } else {
   //       setError(data.message);

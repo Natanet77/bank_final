@@ -3,13 +3,18 @@ class Session {
 
   constructor(user) {
     this.token = Session.generateCode()
-    this.user = user
+    this.user = {
+      email: user.email,
+      isConfirm: user.isConfirm,
+      role: user.role,
+      id: user.id,
+    }
   }
 
   static generateCode = () => {
     const length = 6
     const characters =
-      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890'
+      'ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghijklmnpoqrstuvwxyz0123456789'
 
     let result = ''
 

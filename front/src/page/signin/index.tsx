@@ -8,7 +8,7 @@ const SignInPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isEmailValid, setEmailIsValid] = useState(true);
-  const [isPasswordValid, setPasswordIsValid] = useState(false);
+  const [isPasswordValid, setPasswordIsValid] = useState(true);
   const [alert, setAlert] = useState<string>("");
   const { state, dispatch } = useAuth();
 
@@ -55,7 +55,7 @@ const SignInPage = () => {
       setAlert("Minimum 6 symbols, 1 UpperCase");
     } else {
       try {
-        const res = await fetch("http://localhost:4000/signin", {
+        const response = await fetch("http://localhost:4000/signin", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -63,20 +63,18 @@ const SignInPage = () => {
           body: JSON.stringify({ email, password }),
         });
 
-        const responseData = await res.json();
+        const responseData = await response.json();
 
-        if (res.status === 409) {
+        if (response.status === 409) {
           setAlert(responseData.error);
         }
 
-        if (res.ok) {
+        if (response.ok) {
           const user = responseData.user;
           dispatch({ type: "LOGIN", payload: user });
 
-          if (user.isConfirmed) {
+          if (user) {
             navigate("/balance");
-          } else {
-            navigate("/signupConfirm");
           }
         } else {
           console.error("Registration failed");

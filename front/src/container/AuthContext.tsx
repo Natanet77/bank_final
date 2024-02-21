@@ -189,9 +189,10 @@ export const authReducer = (
     case "LOGIN":
       const newState = {
         ...state,
-        isLogged: action.payload.isLogged,
-        token: action.payload.token,
-        email: action.payload.email,
+        // isLogged: action.payload.isLogged,
+
+        // token: action.payload.token,
+        // email: action.payload.email,
       };
       localStorage.setItem("authState", JSON.stringify(newState)); // Save to local storage
       return newState;
