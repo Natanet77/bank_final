@@ -6,7 +6,6 @@ import {
   authReducer,
   AuthState,
   initialAuthState,
-  useAuth,
 } from "./container/AuthContext";
 import AuthRoute from "./container/AuthRoute";
 import PrivateRoute from "./container/PrivateRoute";
@@ -34,6 +33,7 @@ import ReceivePage from "./page/receive";
 import SendPage from "./page/send";
 
 import TransactionPage from "./page/transaction";
+// import Error from "./page/Error";
 
 // export const Error: React.FC = () => {
 //   return <div className="App-header">Error</div>;
@@ -167,9 +167,9 @@ function App() {
           <Route
             path="/signupConfirm"
             element={
-              <PrivateRoute>
+              <AuthRoute>
                 <SignupConfirmPage />
-              </PrivateRoute>
+              </AuthRoute>
             }
           />
           <Route

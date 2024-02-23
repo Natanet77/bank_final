@@ -4,7 +4,7 @@ class User {
   constructor({ email, password }) {
     this.email = email
     this.password = password
-    // this.isConfirm = false
+    this.isConfirm = false
   }
 
   static create(data) {

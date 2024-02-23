@@ -3,12 +3,13 @@ class Session {
 
   constructor(user) {
     this.token = Session.generateCode()
-    this.user = {
-      email: user.email,
-      isConfirm: user.isConfirm,
-      role: user.role,
-      id: user.id,
-    }
+    this.user = user
+    // {
+    //   email: user.email,
+    //   isConfirm: user.isConfirm,
+    //   role: user.role,
+    //   id: user.id,
+    // }
   }
 
   static generateCode = () => {
@@ -40,6 +41,14 @@ class Session {
     return (
       this.#list.find((item) => item.token === token) ||
       null
+    )
+  }
+  static getByEmail(email) {
+    return (
+      this.#list.find(
+        (item) =>
+          item.user.email === String(email).toLowerCase(),
+      ) || null
     )
   }
 }
