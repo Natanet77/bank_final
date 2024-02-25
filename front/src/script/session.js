@@ -11,6 +11,21 @@ export const saveSession = (session) => {
   }
 };
 
+export const loadSession = () => {
+  try {
+    const session = JSON.parse(localStorage.getItem(SESSION_KEY));
+
+    if (session) {
+      window.session = session;
+    } else {
+      window.session = null;
+    }
+  } catch (err) {
+    console.log(err);
+    window.session = null;
+  }
+};
+
 export const getTokenSession = () => {
   try {
     const session = getSession();

@@ -5,7 +5,7 @@ const router = express.Router()
 
 const { User } = require('../class/user')
 const { Session } = require('../class/session')
-const Notification = require('../class/notification')
+const { Notification } = require('../class/notification')
 
 const { Confirm } = require('../class/confirm')
 
@@ -36,11 +36,21 @@ router.post('/signup', function (req, res) {
   }
 
   try {
-    User.create({ email, password })
+    const user = User.getByEmail(email)
 
-    // const session = Session.create(newUser)
+    if (user) {
+      return res.status(400).json({
+        message: 'Помилка. Такий користувач вже існує',
+      })
+    }
+
+    const newUser = User.create({ email, password })
+
+    const session = Session.create(newUser)
+    Confirm.create(newUser.email)
     return res.status(200).json({
       message: 'The user is successfully registered',
+      session,
     })
   } catch (err) {
     return res.status(400).json({
@@ -50,417 +60,6 @@ router.post('/signup', function (req, res) {
 })
 
 // ====================================================
-// router.get('/signupConfirm', function (req, res) {
-//   const { renew, email } = req.query
-
-//   try {
-//     if (renew) {
-//       const confirm = Confirm.create(email)
-//       return res.status(200).json({
-//         confirm: confirm,
-//       })
-//     } else {
-//       return res.status(400).json({
-//         message: 'Confirmation failed',
-//       })
-//     }
-//   } catch (error) {
-//     return res.status(500).json({
-//       message: error.message,
-//     })
-//   }
-// })
-
-// router.post('/signupConfirm', function (req, res) {
-//   const { code, token } = req.body
-
-//   if (!code || !token) {
-//     return res.status(400).json({
-//       message: 'Required fields are missing',
-//     })
-//   }
-
-//   try {
-//     const session = Session.get(token)
-
-//     if (!session) {
-//       return res.status(400).json({
-//         message:
-//           'Error. You are not signed in to your account',
-//       })
-//     }
-
-//     const email = Confirm.getData(code)
-
-//     if (!email) {
-//       return res.status(400).json({
-//         message: 'Code does not exist',
-//       })
-//     }
-
-//     if (email !== session.user.email) {
-//       return res.status(400).json({
-//         message: 'Code is not valid',
-//       })
-//     }
-
-//     const user = User.getByEmail(session.user.email)
-
-//     user.isConfirm = true
-//     session.user.isConfirm = true
-
-//     return res.status(200).json({
-//       message: 'You have confirmed your email',
-//       session,
-//     })
-//   } catch (err) {
-//     return res.status(400).json({
-//       message: err.message,
-//     })
-//   }
-// })
-// router.get('/signupConfirm', function (req, res) {
-//   const { renew, email } = req.query
-
-//   try {
-//     if (renew) {
-//       const confirm = Confirm.create(email)
-//       return res.status(200).json({
-//         confirm: confirm,
-//       })
-//     } else {
-//       return res.status(400).json({
-//         message: 'Confirmation failed',
-//       })
-//     }
-//   } catch (error) {
-//     return res.status(500).json({
-//       message: error.message,
-//     })
-//   }
-// })
-
-// router.post('/signupConfirm', function (req, res) {
-//   const { code, token } = req.body
-
-//   if (!code || !token) {
-//     return res.status(400).json({
-//       message: 'Required fields are missing',
-//     })
-//   }
-
-//   try {
-//     const session = Session.get(token)
-
-//     if (!session) {
-//       return res.status(400).json({
-//         message:
-//           'Error. You are not signed in to your account',
-//       })
-//     }
-
-//     const email = Confirm.getData(code)
-
-//     if (!email) {
-//       return res.status(400).json({
-//         message: 'Code does not exist',
-//       })
-//     }
-
-//     if (email !== session.user.email) {
-//       return res.status(400).json({
-//         message: 'Code is not valid',
-//       })
-//     }
-
-//     const user = User.getByEmail(session.user.email)
-
-//     user.isConfirm = true
-//     session.user.isConfirm = true
-
-//     return res.status(200).json({
-//       message: 'You have confirmed your email',
-//       session,
-//     })
-//   } catch (err) {
-//     return res.status(400).json({
-//       message: err.message,
-//     })
-//   }
-// })
-
-// router.post('/signupConfirm', (req, res) => {
-//   const { email, enteredCode } = req.body
-//   const user = User.getUserByEmail(email)
-
-//   if (enteredCode !== user.code) {
-//     return res.status(409).json({
-//       error: 'Wrong code entered. Try again!',
-//     })
-//   } else {
-//     user.isConfirmed = true
-
-//     user.notifications.push(
-//       new Notification('Account confirmed!', 'Warning'),
-//     )
-//     return res.status(201).json({
-//       message: 'Code confirmed successfully',
-//       user: {
-//         isLogged: user.isLogged,
-//         token: user.token,
-//         email: user.email,
-//       },
-//     })
-//   }
-// })
-// router.get Створює шлях (PATH) до сторінки
-// router.get('/signupConfirm', function (req, res) {
-//   const { renew, email } = req.query
-
-//   if (renew) {
-//     Confirm.create(email)
-//   }
-//   // res.render генерує нам HTML сторінку
-
-//   // ↙️ cюди вводимо назву файлу з сontainer
-//   return res.render('signupConfirm', {
-//     // вказуємо назву контейнера
-//     name: 'signupConfirm',
-//     // вказуємо назву компонентів
-//     // component: ['back-button', 'field'],
-
-//     // вказуємо назву сторінки
-//     // title: 'Signup confirm page',
-//     // ... сюди можна далі продовжувати додавати потрібні технічні дані, які будуть використовуватися в layout
-
-//     // вказуємо дані,
-//     data: {},
-//   })
-//   // ↑↑ сюди вводимо JSON дані
-// })
-
-// router.post('/signupConfirm', function (req, res) {
-//   const { email, enteredCode } = req.body
-//   const user = User.getUserByEmail(email)
-
-//   if (enteredCode !== user.code) {
-//     return res.status(409).json({
-//       error: 'Wrong code entered. Try again!',
-//     })
-//   } else {
-//     user.isConfirmed = true
-
-//     user.notifications.push(
-//       new Notification('Account confirmed!', 'Warning'),
-//     )
-//     return res.status(201).json({
-//       message: 'Code confirmed successfully',
-//       user: {
-//         isLogged: user.isLogged,
-//         token: user.token,
-//         email: user.email,
-//       },
-//     })
-//   }
-// const { code, token } = req.body
-// if (!code || !token) {
-//   return res.status(400).json({
-//     message: "Помилка. Обов'язкові поля відсутні",
-//   })
-// }
-// // console.log(code, token)
-// try {
-//   const session = Session.get(token)
-//   if (!session) {
-//     return res.status(400).json({
-//       message: 'Помилка. Ви не увійшли в аккаунт',
-//     })
-//   }
-//   const email = Confirm.getData(code)
-//   if (!email) {
-//     return res.status(400).json({
-//       message: 'Помилка. Код не існує',
-//     })
-//   }
-//   if (email !== session.user.email) {
-//     return res.status(400).json({
-//       message: 'Помилка. Код не дійсний',
-//     })
-//   }
-//   const user = User.getByEmail(session.user.email)
-//   user.isConfirm = true
-//   session.user.isConfirm = true
-//   return res.status(200).json({
-//     message: 'Ви підтвердили свою пошту',
-//     session,
-//   })
-// } catch (err) {
-//   return res.status(400).json({
-//     message: err.message,
-//   })
-// }
-// const { email, enteredCode } = req.body
-// const user = User.getUserByEmail(email)
-// if (enteredCode !== user.code) {
-//   return res.status(409).json({
-//     error: 'Wrong code entered. Try again!',
-//   })
-// } else {
-//   user.isConfirmed = true
-//   user.notifications.push(
-//     new Notification('Account confirmed!', 'Warning'),
-//   )
-//   return res.status(201).json({
-//     message: 'Code confirmed successfully',
-//     user: {
-//       isLogged: user.isLogged,
-//       token: user.token,
-//       email: user.email,
-//     },
-//   })
-// }
-// const { code, token, email } = req.body
-// console.log(code, token, email)
-// if (!token || !code || !email) {
-//   return res.status(400).json({
-//     message: "Помилка. Обов'язкові поля відсутні",
-//   })
-// }
-// try {
-//   // const session = Session.get(token)
-//   const session = Session.getByEmail(email)
-//   if (!session) {
-//     return res.status(400).json({
-//       message: 'Помилка. Ви не увійшли в аккаунт',
-//     })
-//   }
-//   const email_cod = Confirm.getData(code)
-//   if (!email_cod || email_cod != email) {
-//     Notification.create(
-//       { token: token, user: { email: email } },
-//       {
-//         operation: 'SIGNUP-CONFIRM',
-//         status: 'WARNING',
-//         message: 'Код не існує',
-//       },
-//     )
-//     return res.status(400).json({
-//       message: 'Код не існує',
-//     })
-//   }
-//   if (email !== session.user.email) {
-//     Notification.create(
-//       { token: token, user: { email: email } },
-//       {
-//         operation: 'SIGNUP-CONFIRM',
-//         status: 'WARNING',
-//         message: 'Код не дійсний',
-//       },
-//     )
-//     return res.status(400).json({
-//       message: 'Код не дійсний',
-//     })
-//   }
-//   const user = User.getByEmail(session.user.email)
-//   user.isConfirm = true
-//   session.user.isConfirm = true
-//   if (session.user.role === 5 && session.user.emailOld) {
-//     Transaction.changeEmail(email, session.user.emailOld)
-//   }
-//   user.role = 1
-//   session.user.role = 1
-//   Notification.create(session, {
-//     operation: 'SIGNUP-CONFIRM',
-//     status: 'SUCCESS',
-//     message: 'Ви підтвердили свою пошту',
-//   })
-//   return res.status(200).json({
-//     message: 'Ви підтвердили свою пошту',
-//     session,
-//   })
-// } catch (err) {
-//   Notification.create(
-//     { token: token, user: { email: email } },
-//     {
-//       operation: 'SIGNUP-CONFIRM',
-//       status: 'ERROR',
-//       message: err.message,
-//     },
-//   )
-//   return res.status(400).json({
-//     message: err.message,
-//   })
-// }
-// })
-// router.get('/signupConfirm', function (req, res) {
-//   const { renew, email } = req.query
-
-//   try {
-//     if (renew) {
-//       const confirm = Confirm.create(email)
-//       return res.status(200).json({
-//         confirm: confirm,
-//       })
-//     } else {
-//       return res.status(400).json({
-//         message: 'Confirmation failed',
-//       })
-//     }
-//   } catch (error) {
-//     return res.status(500).json({
-//       message: error.message,
-//     })
-//   }
-// })
-
-// router.post('/signupConfirm', function (req, res) {
-//   const { code, token } = req.body
-
-//   if (!code || !token) {
-//     return res.status(400).json({
-//       message: 'Required fields are missing',
-//     })
-//   }
-
-//   try {
-//     const session = Session.get(token)
-
-//     if (!session) {
-//       return res.status(400).json({
-//         message:
-//           'Error. You are not signed in to your account',
-//       })
-//     }
-
-//     const email = Confirm.getData(code)
-
-//     if (!email) {
-//       return res.status(400).json({
-//         message: 'Code does not exist',
-//       })
-//     }
-
-//     if (email !== session.user.email) {
-//       return res.status(400).json({
-//         message: 'Code is not valid',
-//       })
-//     }
-
-//     const user = User.getByEmail(session.user.email)
-
-//     user.isConfirm = true
-//     session.user.isConfirm = true
-
-//     return res.status(200).json({
-//       message: 'You have confirmed your email',
-//       session,
-//     })
-//   } catch (err) {
-//     return res.status(400).json({
-//       message: err.message,
-//     })
-//   }
-// })
 // router.get Створює шлях (PATH) до сторінки
 router.get('/signupConfirm', function (req, res) {
   const { renew, email } = req.query
@@ -492,17 +91,17 @@ router.post('/signupConfirm', function (req, res) {
 
   if (!code || !token) {
     return res.status(400).json({
-      message: "Помилка. Обов'язкові поля відсутні",
+      message: 'Required fields are missing',
     })
   }
 
-  // console.log(code, token)
   try {
     const session = Session.get(token)
 
     if (!session) {
       return res.status(400).json({
-        message: 'Помилка. Ви не увійшли в аккаунт',
+        message:
+          'Error. You are not signed in to your account',
       })
     }
 
@@ -510,22 +109,23 @@ router.post('/signupConfirm', function (req, res) {
 
     if (!email) {
       return res.status(400).json({
-        message: 'Помилка. Код не існує',
+        message: 'Code does not exist',
       })
     }
 
     if (email !== session.user.email) {
       return res.status(400).json({
-        message: 'Помилка. Код не дійсний',
+        message: 'Code is not valid',
       })
     }
 
     const user = User.getByEmail(session.user.email)
+
     user.isConfirm = true
     session.user.isConfirm = true
 
     return res.status(200).json({
-      message: 'Ви підтвердили свою пошту',
+      message: 'You have confirmed your email',
       session,
     })
   } catch (err) {
@@ -534,6 +134,7 @@ router.post('/signupConfirm', function (req, res) {
     })
   }
 })
+
 // ====================================================
 router.get('/signin', function (req, res) {
   res.render('signin', {

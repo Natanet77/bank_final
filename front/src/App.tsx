@@ -33,6 +33,7 @@ import ReceivePage from "./page/receive";
 import SendPage from "./page/send";
 
 import TransactionPage from "./page/transaction";
+
 // import Error from "./page/Error";
 
 // export const Error: React.FC = () => {
